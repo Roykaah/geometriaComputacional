@@ -29,4 +29,7 @@ bool collinear(float*, float*, float*);
 float areaPoligono(float poligono[][3], int n);
 bool interseccaoImpropria(float* p1, float* p2, float* p3);
 bool interseccaoPropria(float* p1, float* p2, float* p3, float* p4);
-float* interseccao(float* p1, float* p2, float* p3, float* p4);
+//int interseccao(float* p1, float* p2, float* p3, float* p4);
+bool reflexo(float* p1, float* p2, float* p3);
+bool convexo(float* p1, float* p2, float* p3);
+bool diagonal(float* p1, float* p2, float* poligono[][3], int n);

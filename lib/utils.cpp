@@ -99,6 +99,12 @@ bool collinear(float* p1, float* p2, float* p3){
     return doisAreaT(p1, p2, p3) == 0;
 }
 
+bool reflexo(float* p1, float* p2, float* p3){
+    return doisAreaT(p1, p2, p3) > 0;
+}
+bool convexo(float* p1, float* p2, float* p3){
+    return doisAreaT(p1, p2, p3) < 0;
+}
 /** 
  * Calcula area do programa.
  *
@@ -147,9 +153,10 @@ bool interseccaoPropria(float* p1, float* p2, float* p3, float* p4){
 /** 
  * Vê onde tem a interseccao. (2D)
  *
- * @return ponto de interseccao (float[2])*/
-float* interseccao(float* p1, float* p2, float* p3, float* p4){
+ * @return ponto de interseccao (float[2])
+int interseccao(float* p1, float* p2, float* p3, float* p4){
 
+/*
     //As contas com ctz estão erradas!!!!
     float alpha = (p4[0]-p3[0])*(p1[1]-p3[1]) - (p4[1]-p3[1])*(p1[0]-p3[0])
     /((p4[1]-p3[1])*(p2[0]-p1[0]) - (p4[0]-p3[0])*(p2[1]-p1[1]));
@@ -159,5 +166,18 @@ float* interseccao(float* p1, float* p2, float* p3, float* p4){
     //!!!!!!!!!!!!!
 
     float ponto[2] = {p1[0] + alpha*(p2[0]-p1[0]), p1[1] + alpha*(p2[1]-p1[1])};
-    return ponto;
+    return ponto;*/
+    /*float v = 0;
+    return 1;
+}*/
+bool diagonal(int numeroDoPa, int numeroDoPb, float* poligono[][3], int quantidadePontos){
+    //in Cone()
+    float* pa, *pb ,*anteriorPa,*anteriorPb,*posteriorPa,*posteriorPb;
+    pa = poligono[numeroDoPa][0];
+    pb = poligono[numeroDoPb][0];
+    
+    //if()
+    
+
+    return true;
 }

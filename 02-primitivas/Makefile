@@ -9,6 +9,7 @@ all: triangle.cpp primitives.cpp rectangle.cpp rectangle2.cpp
 	$(CC) rectangle.cpp ../lib/utils.cpp -o rectangle $(GLLIBS)
 	$(CC) rectangle2.cpp ../lib/utils.cpp -o rectangle2 $(GLLIBS)
 	$(CC) testingUtils.cpp ../lib/utils.cpp -o testingUtils $(GLLIBS)
+	$(CC) aula01.cpp ../lib/utils.cpp -o aula01 $(GLLIBS)
 
 clean:
-	rm -f triangle primitives rectangle rectangle2 mouseClick testingUtils
+	rm -f triangle primitives rectangle rectangle2 mouseClick testingUtils aula01
