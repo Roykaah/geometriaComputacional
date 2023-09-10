@@ -83,7 +83,6 @@ float doisAreaT(float* p1, float* p2, float* p3){
         v0[i] = p2[i] - p1[i];
         v1[i] = p3[i] - p1[i];
     }
-
     return ((v0[1]-v0[0])*(v1[2]-v1[0]) - (v0[2]-v0[0])*(v1[1]-v1[0]));
 }
 
@@ -105,30 +104,88 @@ bool reflexo(float* p1, float* p2, float* p3){
 bool convexo(float* p1, float* p2, float* p3){
     return doisAreaT(p1, p2, p3) < 0;
 }
+
 /** 
- * Calcula area do programa.
+ * Calcula area do polígono.
  *
- * @param poligono vetor[x][3].
+ * @param poligono vetor[n*4].
  * @param n Número de pontos no polígono.
  * @return Area float*/
-float areaPoligono(float poligono[][3], int n){
+float areaPoligono(float poligono[], int n){
     float area = 0.0;
     float pZero[3] = {0.0, 0.0, 0.0};
     for (int i = 0; i < n-1; i++){
-        area +=  doisAreaT(pZero, poligono[i], poligono[i+1]);
+        area +=  doisAreaT(pZero, &poligono[i*4], &poligono[(i+1)*4]);
     }
-    area +=  doisAreaT(pZero, poligono[n-1], poligono[0]);
+    area +=  doisAreaT(pZero, &poligono[(n-1)*4], &poligono[0]);
     return area/2;
 }
 
+/**
+ *  Reordena polígino para ser anti-horário*/
+void reordena(float poligono[], int n){
+    float area = areaPoligono(poligono, n);
+    //Se a área é menor que 0, então ele é horário, então inverte
+    if (area < 0){
+        float aux[4];
+        for (int i = 0; i < n/2; i++){
+            for (int j = 0; j < 4; j++){
+                aux[j] = poligono[(i*4)+j];
+                poligono[(i*4)+j] = poligono[(n-i-1)*4+j];
+                poligono[(n-i-1)*4+j] = aux[j];
+            }
+        }
+    }
+}
+
+
+bool diagonal(int numeroDoPa, int numeroDoPb, float poligono[], int n){
+
+    //in Cone()
+    float pa[3], pb[3] ,anteriorPa[3],anteriorPb[3],posteriorPa[3],posteriorPb[3];
+    for(int i = 0; i < 3; i++){
+        pa[i] = poligono[numeroDoPa*4+i];
+        pb[i] = poligono[numeroDoPb*4+i];
+        anteriorPa[i] = poligono[(numeroDoPa-1)*4+i];
+        anteriorPb[i] = poligono[(numeroDoPb-1)*4+i];
+        posteriorPa[i] = poligono[(numeroDoPa+1)*4+i];
+        posteriorPb[i] = poligono[(numeroDoPb+1)*4+i];
+    }
+    //Arrumar!
+    /*if (convexo(anteriorPa,pa,posteriorPa)){
+        if (!(left(pa,pb,anteriorPa) && left(pb,pa,posteriorPa))){
+            return false;
+        }
+        
+    } else{
+        if(!(leftOn(pa,pb,posteriorPa)&&leftOn(pb,pa,anteriorPa))){
+            return false;
+        }
+    }*/
+    //Tratamentos para INTERSECÇÃO:
+    for(int i =0; i<n; i++){
+        if(i != numeroDoPa && i != numeroDoPb && interseccaoImpropria(pa,pb,&poligono[i*4])){
+            printf("Intersecção impropria com i=%d, a=%d e b=%d \n",i,numeroDoPa,numeroDoPb);
+            return false;
+        }
+        if((i+1)%n == numeroDoPa || i == numeroDoPa || (i+1)%n == numeroDoPb || i == numeroDoPb){
+            continue;
+        }
+        if(interseccaoPropria(pa,pb,&poligono[(i)%n],&poligono[((i+1)*4)%n*4])){
+            return false;
+        }
+        
+    }
+
+    return true;
+}
+
 /** 
- * Vê se tem intersecção impropria entre duas linhas (p1,p2) (p3,p4).
+ * Vê se tem intersecção impropria entre  linha (p1,p2) e ponto(p3).
  *
  * @return 0 se não tem, 1 se tem*/
 bool interseccaoImpropria(float* p1, float* p2, float* p3){
-   
-    if (collinear(p1, p2, p3) && (p1[0] <= p3[0] && p3[0] <= p2[0])|| (p2[0] <= p3[0] && p3[0] <= p1[0])){
-
+    if (collinear(p1, p2, p3) && ((p1[0] <= p3[0] && p3[0] <= p2[0])|| (p2[0] <= p3[0] && p3[0] <= p1[0]))){
         return true;
     }
     return false;
@@ -170,14 +227,3 @@ int interseccao(float* p1, float* p2, float* p3, float* p4){
     /*float v = 0;
     return 1;
 }*/
-bool diagonal(int numeroDoPa, int numeroDoPb, float* poligono[][3], int quantidadePontos){
-    //in Cone()
-    float* pa, *pb ,*anteriorPa,*anteriorPb,*posteriorPa,*posteriorPb;
-    pa = poligono[numeroDoPa][0];
-    pb = poligono[numeroDoPb][0];
-    
-    //if()
-    
-
-    return true;
-}

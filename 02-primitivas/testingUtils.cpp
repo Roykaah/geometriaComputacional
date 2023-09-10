@@ -16,11 +16,11 @@ int main(int argc, char** argv)
     printf("left: %d\n", left(p1, p2, p3));
     printf("leftOn: %d\n", leftOn(p1, p2, p3));
     printf("collinear: %d\n", collinear(p1, p2, p3));*/
-    float poligono[4][3] = {{0.0, 0.0, 0.0},
-            {0.0, 1.0, 0.0},
-            {1.0, 1.0, 0.0},
-            {1.0, 0.0, 0.0}
-            
+    float poligono[] = {
+            0.0, 0.0, 0.0,0.0,
+            1.0, 0.0, 0.0,0.0,
+            1.0, 1.0, 0.0,0.0,
+            0.0, 1.0, 0.0,0.0
             };
     printf("Area do poligono: %f\n", areaPoligono(poligono,4));
     return 0;
