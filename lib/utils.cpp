@@ -159,13 +159,12 @@ bool diagonal(int numeroDoPa, int numeroDoPb, float poligono[], int n){
         
     } else{
         if(!(leftOn(pa,pb,posteriorPa)&&leftOn(pb,pa,anteriorPa))){
-            return false;
+            return false;-
         }
     }*/
     //Tratamentos para INTERSECÇÃO:
     for(int i =0; i<n; i++){
         if(i != numeroDoPa && i != numeroDoPb && interseccaoImpropria(pa,pb,&poligono[i*4])){
-            printf("Intersecção impropria com i=%d, a=%d e b=%d \n",i,numeroDoPa,numeroDoPb);
             return false;
         }
         if((i+1)%n == numeroDoPa || i == numeroDoPa || (i+1)%n == numeroDoPb || i == numeroDoPb){
