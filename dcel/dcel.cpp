@@ -75,11 +75,80 @@ HalfEdge* HalfEdge_to_link(HalfEdge* a, DCEL* dcel){
     return edge;
 }
 
+void corta_aresta(HalfEdge* aresta_atual, DCEL* dcel){
+    //Identifica o sentido das arestas (anti-horário dita a origem)
+
+
+
+    //Cria o ponto intermediário e seta em cada uma das arestas
+    Ponto *aux_destino = aresta_atual->destino;
+    float x_intermediario = (aresta_atual->origem->x + aresta_atual->destino->x)/2;
+    float y_intermediario = (aresta_atual->origem->y + aresta_atual->destino->y)/2;
+    Ponto *aux_intermediario = (Ponto*) malloc(sizeof(Ponto));
+    aux_intermediario->x = x_intermediario;
+    aux_intermediario->y = y_intermediario;
+
+
+    //Cria a aresta e faz as ligações devidas
+    HalfEdge* nova_aresta = (HalfEdge*) malloc(sizeof(HalfEdge));
+    HalfEdge* twin_nova_aresta = (HalfEdge*) malloc(sizeof(HalfEdge));
+    nova_aresta->origem = aux_intermediario;
+    nova_aresta->destino = aresta_atual->destino;
+    nova_aresta->twin = twin_nova_aresta;
+    nova_aresta->next = aresta_atual->next;
+    nova_aresta->previous = aresta_atual;
+    nova_aresta->face = NULL;//aresta_atual->face;
+    nova_aresta->visited = false;
+    twin_nova_aresta->origem = aresta_atual->destino;
+    twin_nova_aresta->destino = aux_intermediario;
+    twin_nova_aresta->twin = nova_aresta;
+    twin_nova_aresta->next = aresta_atual->twin;
+    twin_nova_aresta->previous = aresta_atual->twin->previous;
+    twin_nova_aresta->face = NULL;//aresta_atual->twin->face;
+    twin_nova_aresta->visited = false;
+
+    aresta_atual->next->previous = nova_aresta;
+    aresta_atual->twin->previous->next = twin_nova_aresta;
+
+    aresta_atual->destino = aux_intermediario;
+    aresta_atual->next = nova_aresta;
+    aresta_atual->twin->previous = twin_nova_aresta;
+    aresta_atual->twin->origem = aux_intermediario;
+    //Adiciona A aresta e o ponto na dcel
+    dcel->arestas.push_back(nova_aresta);
+    dcel->pontos.push_back(aux_intermediario);
+    
+
+
+}
+
 void connect_orbit(HalfEdge* nova, HalfEdge* antiga){
-    antiga->previous = nova;
-    antiga->twin->next = nova->twin;
-    nova->next = antiga;
-    nova->twin->previous = antiga->twin;
+    if (nova->origem == antiga->origem && nova->destino == antiga->destino){
+        return;
+    }
+    nova->next = antiga; //100% certo
+    nova->twin->previous = antiga->previous; //100% certo
+    antiga->previous->next = nova->twin; //100% certo
+    antiga->previous = nova; //100% certo
+
+
+    //tentativa 3
+    //nova->next = antiga;
+    //nova->twin->previous = antiga->previous;
+    //antiga->previous->next = nova->twin;
+    //antiga->previous = nova;
+
+    //tentativa 2
+    //antiga->next = nova;
+    //nova->twin->previous = antiga->previous;
+    //antiga->previous->next = nova->twin;
+    //antiga->previous = nova;
+
+    //tentativa 1
+    //antiga->previous = nova;
+    //antiga->twin->next = nova->twin;
+    //nova->next = antiga;
+    //nova->twin->previous = antiga->twin;
 }
 
 void connect(Ponto* origem, Ponto* destino, DCEL* dcel){
@@ -88,15 +157,15 @@ void connect(Ponto* origem, Ponto* destino, DCEL* dcel){
     nova_aresta->origem = origem;
     nova_aresta->destino = destino;
     nova_aresta->twin = twin_nova_aresta;
-    nova_aresta->next = nova_aresta;
-    nova_aresta->previous = nova_aresta;
+    nova_aresta->next = twin_nova_aresta;
+    nova_aresta->previous = twin_nova_aresta;
     nova_aresta->face = NULL;
     nova_aresta->visited = false;
     twin_nova_aresta->origem = destino;
     twin_nova_aresta->destino = origem;
     twin_nova_aresta->twin = nova_aresta;
-    twin_nova_aresta->next = twin_nova_aresta;
-    twin_nova_aresta->previous = twin_nova_aresta;
+    twin_nova_aresta->next = nova_aresta;
+    twin_nova_aresta->previous = nova_aresta;
     twin_nova_aresta->face = NULL;
     twin_nova_aresta->visited = false;
     

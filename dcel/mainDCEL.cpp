@@ -20,6 +20,10 @@ void keyboard(unsigned char key, int x, int y) {
         case 'p':
             halfEdge_atual = halfEdge_atual->previous;
             break;
+        case 'c':
+            corta_aresta(halfEdge_atual, &dcel);
+            
+            break;
     }
     glutPostRedisplay();
 }
@@ -98,11 +102,20 @@ int main(int argc, char** argv) {
     dcel.pontos.push_back(&f);
     dcel.pontos.push_back(&g);
     
-    connect(&c, &b, &dcel);
-    connect(&d, &c, &dcel);
-    connect(&e, &d, &dcel);
-    connect(&f, &e, &dcel);
+
+
+
+    connect(&c, &a, &dcel);
+    connect(&f, &a, &dcel);
     connect(&b, &f, &dcel);
+    connect(&f, &e, &dcel);
+    connect(&e, &d, &dcel);
+    connect(&d, &c, &dcel);
+    connect(&c, &b, &dcel);
+    connect(&d, &a, &dcel);
+    connect(&b, &a, &dcel);
+
+    
     //connect(&a, &f, &dcel);
     halfEdge_atual = dcel.arestas[0];
 
