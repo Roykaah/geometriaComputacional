@@ -32,7 +32,7 @@ float angle_between_points(Ponto* c, Ponto* a, Ponto* b){
     float dot = x1*x2 + y1*y2;
     float det = x1*y2 - y1*x2;
     float angle = atan2(det, dot);
-    if (angle < 0) angle = abs(angle)+M_PI;
+    if (angle < 0) angle = angle + 2*M_PI;
     return angle;
 }
 
@@ -41,25 +41,14 @@ HalfEdge* HalfEdge_to_link(HalfEdge* a, DCEL* dcel){
     float menor_angulo = 1000000.0;
      for (int i = 0; i < dcel->arestas.size(); i++){
         if (dcel->arestas[i]->destino != a->origem && dcel->arestas[i]->origem == a->destino){
-            printf("Angulo entre %c%c e %c%c eh  %f\n", 
-                    a->origem->id, a->destino->id, dcel->arestas[i]->origem->id, dcel->arestas[i]->destino->id,
-                    (angle_between_points(a->origem, dcel->arestas[i]->origem, dcel->arestas[i]->destino)*180)/M_PI
-                    );
+            
             if (angle_between_points(a->origem, dcel->arestas[i]->origem, dcel->arestas[i]->destino) < menor_angulo){
-                printf("Angulo entre %c%c e %c%c eh  %f\n", 
-                    a->origem->id, a->destino->id, dcel->arestas[i]->origem->id, dcel->arestas[i]->destino->id,
-                    (angle_between_points(a->origem, dcel->arestas[i]->origem, dcel->arestas[i]->destino)*180)/M_PI
-                    );
                 menor_angulo = angle_between_points(a->origem, dcel->arestas[i]->origem, dcel->arestas[i]->destino);
                 edge = dcel->arestas[i];
             }
         }
         if (dcel->arestas[i]->twin->destino != a->origem && dcel->arestas[i]->twin->origem == a->destino){
             if (angle_between_points(a->origem, dcel->arestas[i]->twin->origem, dcel->arestas[i]->twin->destino) < menor_angulo){
-                printf("Angulo entre %c%c e %c%c eh  %f\n", 
-                    a->origem->id, a->destino->id, dcel->arestas[i]->twin->origem->id, dcel->arestas[i]->twin->destino->id,
-                    (angle_between_points(a->origem, dcel->arestas[i]->twin->origem, dcel->arestas[i]->twin->destino)*180)/M_PI
-                    );
                 menor_angulo = angle_between_points(a->origem, dcel->arestas[i]->twin->origem, dcel->arestas[i]->twin->destino);
                 edge = dcel->arestas[i]->twin;
             }
@@ -69,10 +58,28 @@ HalfEdge* HalfEdge_to_link(HalfEdge* a, DCEL* dcel){
     if (menor_angulo == 1000000){
         edge = a;
     }
-    printf("Conectado a aresta %c%c na %c%c. Angulo = %f\n", 
-    a->origem->id, a->destino->id, edge->origem->id, edge->destino->id,menor_angulo
-    );
     return edge;
+}
+
+int existe_outro_ponto_muito_perto(Ponto* p, DCEL* dcel){
+    for (Ponto* v : dcel->pontos) {
+        if (abs (v->x - p->x) < 0.07 && abs(v->y - p->y)<0.07){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+Ponto* ponto_mais_perto(float x, float y, DCEL* dcel){
+    Ponto *ponto_perto = (Ponto*) malloc(sizeof(Ponto));
+    float menor_distancia = 100000;
+    for (Ponto* v : dcel->pontos) {
+        if (sqrt((v->x - x) * (v->x - x)+(v->y - y)*(v->y - y))<menor_distancia){
+            ponto_perto = v;
+            menor_distancia = sqrt((v->x - x) * (v->x - x)+(v->y - y)*(v->y - y));
+        }
+    }
+    return ponto_perto;
 }
 
 void corta_aresta(HalfEdge* aresta_atual, DCEL* dcel){
