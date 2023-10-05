@@ -42,3 +42,7 @@ float angle_between_points(Ponto* a, Ponto* b, Ponto* c);
 void connect(Ponto* origem, Ponto* destino, DCEL* dcel);
 
 void corta_aresta(HalfEdge* aresta_atual, DCEL* dcel);
+
+int existe_outro_ponto_muito_perto(Ponto* p, DCEL* dcel);
+
+Ponto* ponto_mais_perto(float x, float y, DCEL* dcel);
