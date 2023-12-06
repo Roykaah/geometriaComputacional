@@ -37,7 +37,7 @@ unsigned int VBO;
 int type_primitive = GL_TRIANGLES;
 int quantidade_cliques = 0;
 
-float vertices[] = {
+double vertices[] = {
     0.0f, 1.0f,0.0f,0.0f,
     1.0f, 0.0f,0.0f,0.0f,
     0.0f, 0.0f,0.0f,0.0f };
@@ -117,7 +117,7 @@ void reshape(int width, int height)
  */
 void mouse(int button, int state, int x, int y)
 {
-    float area;
+    double area;
     char* orientacao;
     if (state == GLUT_DOWN){
 
@@ -127,14 +127,14 @@ void mouse(int button, int state, int x, int y)
 
     case GLUT_LEFT_BUTTON:
         printf("posição do ponto nº %d: x = %d, y = %d\n", quantidade_cliques + 1, x, y);
-        vertices[(quantidade_cliques * 4)%12] = (float(x)*2/win_width -1);
-        vertices[(quantidade_cliques * 4 + 1)%12] = -(float(y)*2/win_height -1);
-        printf("%f e %f",vertices[(quantidade_cliques * 4)%12],-vertices[(quantidade_cliques * 4 +1)%12]);
+        vertices[(quantidade_cliques * 4)%12] = (double(x)*2/win_width -1);
+        vertices[(quantidade_cliques * 4 + 1)%12] = -(double(y)*2/win_height -1);
+        printf("%lf e %lf",vertices[(quantidade_cliques * 4)%12],-vertices[(quantidade_cliques * 4 +1)%12]);
         quantidade_cliques += 1;
         glBufferSubData(GL_ARRAY_BUFFER,0 ,sizeof(vertices), vertices);
         glutPostRedisplay();
         area = doisAreaT(vertices,&vertices[4],&vertices[8])/2;
-        printf("A área é de %f e a orientação é: ",abs(area));
+        printf("A área é de %lf e a orientação é: ",abs(area));
         (area > 0) ? printf(" anti-horário\n") : printf(" horário\n");
         break;
     case GLUT_RIGHT_BUTTON:
@@ -171,7 +171,7 @@ void initData()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // Set attributes.
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 4, GL_double, GL_FALSE, 4 * sizeof(double), (void *)0);
     glEnableVertexAttribArray(0);
 
     // Unbind Vertex Array Object.

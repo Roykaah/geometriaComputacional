@@ -7,8 +7,8 @@ struct DCEL;
 using namespace std;
 
 struct Ponto{
-    float x;
-    float y;
+    double x;
+    double y;
     struct HalfEdge* aresta;
     char id;
 };
@@ -37,7 +37,7 @@ struct DCEL{
     vector <Face*> faces;
 };
 
-float angle_between_points(Ponto* a, Ponto* b, Ponto* c);
+double angle_between_points(Ponto* a, Ponto* b, Ponto* c);
 
 void connect(Ponto* origem, Ponto* destino, DCEL* dcel);
 
@@ -45,4 +45,4 @@ void corta_aresta(HalfEdge* aresta_atual, DCEL* dcel);
 
 int existe_outro_ponto_muito_perto(Ponto* p, DCEL* dcel);
 
-Ponto* ponto_mais_perto(float x, float y, DCEL* dcel);
+Ponto* ponto_mais_perto(double x, double y, DCEL* dcel);

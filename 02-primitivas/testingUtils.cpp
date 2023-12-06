@@ -7,22 +7,22 @@
 
 int main(int argc, char** argv)
 {
-    float p1[3] = {0.0, 0.0, 0.0};
-    float p2[3] = {1.0, 0.0, 0.0};
-    float p3[3] = {0.0, 1.0, 0.0};
+    double p1[3] = {0.0, 0.0, 0.0};
+    double p2[3] = {1.0, 0.0, 0.0};
+    double p3[3] = {0.0, 1.0, 0.0};
     /*
-    float areaTriangulo = doisAreaT(p1, p2, p3)/2;
-    printf("Area do triangulo: %f\n", areaTriangulo);
+    double areaTriangulo = doisAreaT(p1, p2, p3)/2;
+    printf("Area do triangulo: %lf\n", areaTriangulo);
     printf("left: %d\n", left(p1, p2, p3));
     printf("leftOn: %d\n", leftOn(p1, p2, p3));
     printf("collinear: %d\n", collinear(p1, p2, p3));*/
-    float poligono[] = {
+    double poligono[] = {
             0.0, 0.0, 0.0,0.0,
             1.0, 0.0, 0.0,0.0,
             1.0, 1.0, 0.0,0.0,
             0.0, 1.0, 0.0,0.0
             };
-    printf("Area do poligono: %f\n", areaPoligono(poligono,4));
+    printf("Area do poligono: %lf\n", areaPoligono(poligono,4));
     return 0;
 
 }

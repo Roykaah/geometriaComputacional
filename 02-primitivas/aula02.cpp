@@ -5,7 +5,7 @@
 #include <GL/freeglut.h>
 #include "../lib/utils.h"
 
-void ClassificadorConvexoReflexo( float poligono[],int n){
+void ClassificadorConvexoReflexo( double poligono[],int n){
     for(int i=0;i<n;i++){
         reordena(poligono, n);
         if(doisAreaT(&poligono[i==0?(n-1)*4:(i-1)*4],&poligono[i*4],&poligono[((i+1)*4)%(n*4)])>0)
@@ -18,7 +18,7 @@ void ClassificadorConvexoReflexo( float poligono[],int n){
 int main(int argc, char **argv)
 {
     
-    float poligono[] = {
+    double poligono[] = {
             0.0, 0.0, 0.0,0.0, 
             0.0, 1.0, 0.0,0.0,
             0.5, 0.6, 0.0,0.0,

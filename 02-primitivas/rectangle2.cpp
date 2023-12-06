@@ -131,7 +131,7 @@ void keyboard(unsigned char key, int x, int y)
 void initData()
 {
     // Set triangle vertices.
-    float vertices[] = {
+    double vertices[] = {
 	// First triangle
         // coordinate     color
         -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
@@ -154,9 +154,9 @@ void initData()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
     // Set attributes.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_double, GL_FALSE, 6*sizeof(double), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_double, GL_FALSE, 6*sizeof(double), (void*)(3*sizeof(double)));
     glEnableVertexAttribArray(1);
 
     // Unbind Vertex Array Object.

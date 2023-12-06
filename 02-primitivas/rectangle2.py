@@ -129,7 +129,7 @@ def initData():
          0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
          0.5,  0.5, 0.0, 0.0, 1.0, 0.0,
         -0.5,  0.5, 0.0, 1.0, 0.0, 0.0
-    ], dtype='float32')
+    ], dtype='double32')
     
     # Vertex array.
     VAO = gl.glGenVertexArrays(1)
@@ -141,9 +141,9 @@ def initData():
     gl.glBufferData(gl.GL_ARRAY_BUFFER, vertices.nbytes, vertices, gl.GL_STATIC_DRAW)
     
     # Set attributes.
-    gl.glVertexAttribPointer(0, 3, gl.GL_FLOAT, gl.GL_FALSE, 6*vertices.itemsize, None)
+    gl.glVertexAttribPointer(0, 3, gl.GL_double, gl.GL_FALSE, 6*vertices.itemsize, None)
     gl.glEnableVertexAttribArray(0)
-    gl.glVertexAttribPointer(1, 3, gl.GL_FLOAT, gl.GL_FALSE, 6*vertices.itemsize, c_void_p(3*vertices.itemsize))
+    gl.glVertexAttribPointer(1, 3, gl.GL_double, gl.GL_FALSE, 6*vertices.itemsize, c_void_p(3*vertices.itemsize))
     gl.glEnableVertexAttribArray(1)
     
     # Unbind Vertex Array Object.

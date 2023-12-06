@@ -117,7 +117,7 @@ void keyboard(unsigned char key, int x, int y)
 void initData()
 {
     // Set triangle vertices.
-    float vertices[] = {
+    double vertices[] = {
         -0.5f, -0.5f, 0.0f,
          0.5f, -0.5f, 0.0f,
          0.0f,  0.5f, 0.0f
@@ -133,7 +133,7 @@ void initData()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
     // Set attributes.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_double, GL_FALSE, 3*sizeof(double), (void*)0);
     glEnableVertexAttribArray(0);
 
     // Unbind Vertex Array Object.

@@ -72,7 +72,7 @@ HalfEdge* create_edge(Vertex* v1, Vertex* v2) {
     return e;
 }
 
-Vertex* create_vertex(float x, float y) {
+Vertex* create_vertex(double x, double y) {
     Vertex* v = new Vertex(x, y);
     dcel.vertices.push_back(v);
     return v;

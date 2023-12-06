@@ -5,7 +5,7 @@
 #include "dcel.hpp"
 #include <math.h>
 
-void create_ponto(float x, float y, DCEL* dcel){
+void create_ponto(double x, double y, DCEL* dcel){
     Ponto* ponto = (Ponto*) malloc(sizeof(Ponto));
     ponto->x = x;
     ponto->y = y;
@@ -24,21 +24,21 @@ void create_face(DCEL* dcel){
  * Retorna angulo b(^a)c
  *
  */
-float angle_between_points(Ponto* c, Ponto* a, Ponto* b){
-    float x1 = b->x - a->x;
-    float y1 = b->y - a->y;
-    float x2 = c->x - a->x;
-    float y2 = c->y - a->y;
-    float dot = x1*x2 + y1*y2;
-    float det = x1*y2 - y1*x2;
-    float angle = atan2(det, dot);
+double angle_between_points(Ponto* c, Ponto* a, Ponto* b){
+    double x1 = b->x - a->x;
+    double y1 = b->y - a->y;
+    double x2 = c->x - a->x;
+    double y2 = c->y - a->y;
+    double dot = x1*x2 + y1*y2;
+    double det = x1*y2 - y1*x2;
+    double angle = atan2(det, dot);
     if (angle < 0) angle = angle + 2*M_PI;
     return angle;
 }
 
 HalfEdge* HalfEdge_to_link(HalfEdge* a, DCEL* dcel){
     HalfEdge* edge;
-    float menor_angulo = 1000000.0;
+    double menor_angulo = 1000000.0;
      for (int i = 0; i < dcel->arestas.size(); i++){
         if (dcel->arestas[i]->destino != a->origem && dcel->arestas[i]->origem == a->destino){
             
@@ -70,9 +70,9 @@ int existe_outro_ponto_muito_perto(Ponto* p, DCEL* dcel){
     return 0;
 }
 
-Ponto* ponto_mais_perto(float x, float y, DCEL* dcel){
+Ponto* ponto_mais_perto(double x, double y, DCEL* dcel){
     Ponto *ponto_perto = (Ponto*) malloc(sizeof(Ponto));
-    float menor_distancia = 100000;
+    double menor_distancia = 100000;
     for (Ponto* v : dcel->pontos) {
         if (sqrt((v->x - x) * (v->x - x)+(v->y - y)*(v->y - y))<menor_distancia){
             ponto_perto = v;
@@ -89,8 +89,8 @@ void corta_aresta(HalfEdge* aresta_atual, DCEL* dcel){
 
     //Cria o ponto intermediário e seta em cada uma das arestas
     Ponto *aux_destino = aresta_atual->destino;
-    float x_intermediario = (aresta_atual->origem->x + aresta_atual->destino->x)/2;
-    float y_intermediario = (aresta_atual->origem->y + aresta_atual->destino->y)/2;
+    double x_intermediario = (aresta_atual->origem->x + aresta_atual->destino->x)/2;
+    double y_intermediario = (aresta_atual->origem->y + aresta_atual->destino->y)/2;
     Ponto *aux_intermediario = (Ponto*) malloc(sizeof(Ponto));
     aux_intermediario->x = x_intermediario;
     aux_intermediario->y = y_intermediario;

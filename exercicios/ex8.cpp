@@ -39,7 +39,7 @@ unsigned int VBO;
 int type_primitive = GL_TRIANGLES;
 int quantidade_cliques = 0;
 
-float vertices[] = {
+double vertices[] = {
     0.0f, 1.0f,0.0f,0.0f,
     1.0f, 0.0f,0.0f,0.0f,
     0.0f, 0.0f,0.0f,0.0f,
@@ -116,16 +116,16 @@ void initShaders(void);
  *
  * Draws primitive.
  */
-void drawCircle(float cx, float cy, float r, int num_segments)
+void drawCircle(double cx, double cy, double r, int num_segments)
 {
-    float theta = 3.1415926 * 2 / float(num_segments);
-    float tangetial_factor = tanf(theta);//calculate the tangential factor 
+    double theta = 3.1415926 * 2 / double(num_segments);
+    double tangetial_factor = tanf(theta);//calculate the tangential factor 
 
-    float radial_factor = cosf(theta);//calculate the radial factor 
+    double radial_factor = cosf(theta);//calculate the radial factor 
 
-    float x = r;//we start at angle = 0 
+    double x = r;//we start at angle = 0 
 
-    float y = 0;
+    double y = 0;
     glLineWidth(2);
     glBegin(GL_LINE_LOOP);
     for (int ii = 0; ii < num_segments; ii++)
@@ -136,8 +136,8 @@ void drawCircle(float cx, float cy, float r, int num_segments)
         //remember, the radial vector is (x, y) 
         //to get the tangential vector we flip those coordinates and negate one of them 
 
-        float tx = -y;
-        float ty = x;
+        double tx = -y;
+        double ty = x;
 
         //add the tangential vector 
 
@@ -151,30 +151,30 @@ void drawCircle(float cx, float cy, float r, int num_segments)
     }
     glEnd();
 }
-int inCircle(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4){
-    /*float mr = (y2 - y1) / (x2 - x1);
-    float mt = (y3 - y2) / (x3 - x2);
+int inCircle(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4){
+    /*double mr = (y2 - y1) / (x2 - x1);
+    double mt = (y3 - y2) / (x3 - x2);
 
-    float x = (mr * mt * (y3 - y1) + mr * (x2 + x3) - mt * (x1 + x2)) / (2.0 * (mr - mt));
-    float y = (y1 + y2) / 2.0 - (x - (x1 + x2) / 2.0) / mr;
+    double x = (mr * mt * (y3 - y1) + mr * (x2 + x3) - mt * (x1 + x2)) / (2.0 * (mr - mt));
+    double y = (y1 + y2) / 2.0 - (x - (x1 + x2) / 2.0) / mr;
 
-    float radius = sqrt(pow(x2 - x, 2.0) + pow(y2 - y, 2.0));
-    float dist = sqrt(pow(x4 - x, 2.0) + pow(y4 - y, 2.0));
+    double radius = sqrt(pow(x2 - x, 2.0) + pow(y2 - y, 2.0));
+    double dist = sqrt(pow(x4 - x, 2.0) + pow(y4 - y, 2.0));
     if (dist < radius){
         return true;
     }
     else{
         return false;
     }*/
-    float z1 = (x1*x1+y1*y1);
-    float z2 = (x2*x2+y2*y2);
-    float z3 = (x3*x3+y3*y3);
-    float z4 = (x4*x4+y4*y4);
-    float xn = (y2-y1)*(z3-z1)- (y3-y1)*(z2-z1);
-    float yn = (x3-x1)*(z2-z1)- (x2-x1)*(z3-z1);
-    float zn = (x2-x1)*(y3-y1)- (x3-x1)*(y2-y1);
-    float area = (x4 -x1)*xn + (y4-y1)*yn + (z4-z1)*zn;
-    printf("area %f\n",area);
+    double z1 = (x1*x1+y1*y1);
+    double z2 = (x2*x2+y2*y2);
+    double z3 = (x3*x3+y3*y3);
+    double z4 = (x4*x4+y4*y4);
+    double xn = (y2-y1)*(z3-z1)- (y3-y1)*(z2-z1);
+    double yn = (x3-x1)*(z2-z1)- (x2-x1)*(z3-z1);
+    double zn = (x2-x1)*(y3-y1)- (x3-x1)*(y2-y1);
+    double area = (x4 -x1)*xn + (y4-y1)*yn + (z4-z1)*zn;
+    printf("area %lf\n",area);
     if (area > 0){
         return true;
     }
@@ -184,14 +184,14 @@ int inCircle(float x1, float y1, float x2, float y2, float x3, float y3, float x
 }
 void display()
 {
-    float ax = vertices[0];
-    float ay = vertices[1];
-    float bx = vertices[4];
-    float by = vertices[5];
-    float cx = vertices[8];
-    float cy = vertices[9];
-    float dx = vertices[12];
-    float dy = vertices[13];
+    double ax = vertices[0];
+    double ay = vertices[1];
+    double bx = vertices[4];
+    double by = vertices[5];
+    double cx = vertices[8];
+    double cy = vertices[9];
+    double dx = vertices[12];
+    double dy = vertices[13];
 
 
     glClear(GL_COLOR_BUFFER_BIT);
@@ -208,7 +208,7 @@ void display()
     glVertex2f(cx,cy);
     glVertex2f(cx,cy);
     glVertex2f(ax,ay);
-    printf("%f %f %f %f %f %f",ax,ay,bx,by,cx,cy);
+    printf("%lf %lf %lf %lf %lf %lf",ax,ay,bx,by,cx,cy);
     glEnd();
 
     //TRIANGULO 2
@@ -222,17 +222,17 @@ void display()
     glVertex2f(cx,cy);
 
 
-    float mr = (by - ay) / (bx - ax);
-    float mt = (cy - by) / (cx - bx);
+    double mr = (by - ay) / (bx - ax);
+    double mt = (cy - by) / (cx - bx);
 
-    float x = (mr * mt * (cy - ay) + mr * (bx + cx) - mt * (ax + bx)) / (2.0 * (mr - mt));
-    float y = (ay + by) / 2.0 - (x - (ax + bx) / 2.0) / mr;
+    double x = (mr * mt * (cy - ay) + mr * (bx + cx) - mt * (ax + bx)) / (2.0 * (mr - mt));
+    double y = (ay + by) / 2.0 - (x - (ax + bx) / 2.0) / mr;
 
-    float radius = sqrt(pow(bx - x, 2.0) + pow(by - y, 2.0));
+    double radius = sqrt(pow(bx - x, 2.0) + pow(by - y, 2.0));
     
-    float p1[3] = {ax,ay,0};
-    float p2[3] = {bx,by,0};
-    float p3[3] = {cx,cy,0};
+    double p1[3] = {ax,ay,0};
+    double p2[3] = {bx,by,0};
+    double p3[3] = {cx,cy,0};
 
     if (left(p1,p2,p3)){
         inCircle(ax,ay,bx,by,cx,cy,dx,dy) ? glColor3f(1.0, 0.0, 0.0) : glColor3f(0.0, 1.0, 0.0);
@@ -273,7 +273,7 @@ void reshape(int width, int height)
  */
 void mouse(int button, int state, int x, int y)
 {
-    float area;
+    double area;
     char* orientacao;
     if (state == GLUT_DOWN){
 
@@ -283,25 +283,25 @@ void mouse(int button, int state, int x, int y)
 
     case GLUT_LEFT_BUTTON:
         printf("posição do ponto nº %d: x = %d, y = %d\n", quantidade_cliques + 1, x, y);
-        vertices[(quantidade_cliques * 4)%12] = (float(x)*2/win_width -1);
-        vertices[(quantidade_cliques * 4 + 1)%12] = -(float(y)*2/win_height -1);
-        printf("%f e %f",vertices[(quantidade_cliques * 4)%12],-vertices[(quantidade_cliques * 4 +1)%12]);
+        vertices[(quantidade_cliques * 4)%12] = (double(x)*2/win_width -1);
+        vertices[(quantidade_cliques * 4 + 1)%12] = -(double(y)*2/win_height -1);
+        printf("%lf e %lf",vertices[(quantidade_cliques * 4)%12],-vertices[(quantidade_cliques * 4 +1)%12]);
         quantidade_cliques += 1;
         //int type_primitive = GL_TRIANGLES;
         glutPostRedisplay();
         //area = doisAreaT(vertices,&vertices[4],&vertices[8])/2;
-        //printf("A área é de %f e a orientação é: ",abs(area));
+        //printf("A área é de %lf e a orientação é: ",abs(area));
         //(area > 0) ? printf(" anti-horário\n") : printf(" horário\n");
         break;
     case GLUT_RIGHT_BUTTON:
         printf("posição do ponto nº %d: x = %d, y = %d\n", quantidade_cliques + 1, x, y);
-        vertices[12] = (float(x)*2/win_width -1);
-        vertices[13] = -(float(y)*2/win_height -1);
-        printf("%f e %f",vertices[12],-vertices[13]);
+        vertices[12] = (double(x)*2/win_width -1);
+        vertices[13] = -(double(y)*2/win_height -1);
+        printf("%lf e %lf",vertices[12],-vertices[13]);
         //int type_primitive = GL_TRIANGLES;
         glutPostRedisplay();
         //area = doisAreaT(vertices,&vertices[4],&vertices[8])/2;
-        //printf("A área é de %f e a orientação é: ",abs(area));
+        //printf("A área é de %lf e a orientação é: ",abs(area));
         //(area > 0) ? printf(" anti-horário\n") : printf(" horário\n");
         break;
 

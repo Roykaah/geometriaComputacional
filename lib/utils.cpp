@@ -8,6 +8,7 @@
  */
 
 #include "utils.h"
+#include <cmath>
 
 
 /** 
@@ -74,8 +75,8 @@ int createShaderProgram(const char *vertex_code, const char *fragment_code)
 }
 
 
-float doisAreaT(float* p1, float* p2, float* p3){
-    float v0[3], v1[3];
+double doisAreaT(double* p1, double* p2, double* p3){
+    double v0[3], v1[3];
 
     //cria os dois vetores que irão formar o triangulo
     for (int i = 0; i < 3; i++)
@@ -86,22 +87,22 @@ float doisAreaT(float* p1, float* p2, float* p3){
     return ((v0[1]-v0[0])*(v1[2]-v1[0]) - (v0[2]-v0[0])*(v1[1]-v1[0]));
 }
 
-bool left(float* p1, float* p2, float* p3){
+bool left(double* p1, double* p2, double* p3){
     return doisAreaT(p1, p2, p3) > 0;
 }
 
-bool leftOn(float* p1, float* p2, float* p3){
+bool leftOn(double* p1, double* p2, double* p3){
     return doisAreaT(p1, p2, p3) >= 0;
 }
 
-bool collinear(float* p1, float* p2, float* p3){
+bool collinear(double* p1, double* p2, double* p3){
     return doisAreaT(p1, p2, p3) == 0;
 }
 
-bool reflexo(float* p1, float* p2, float* p3){
+bool reflexo(double* p1, double* p2, double* p3){
     return doisAreaT(p1, p2, p3) > 0;
 }
-bool convexo(float* p1, float* p2, float* p3){
+bool convexo(double* p1, double* p2, double* p3){
     return doisAreaT(p1, p2, p3) < 0;
 }
 
@@ -110,10 +111,10 @@ bool convexo(float* p1, float* p2, float* p3){
  *
  * @param poligono vetor[n*4].
  * @param n Número de pontos no polígono.
- * @return Area float*/
-float areaPoligono(float poligono[], int n){
-    float area = 0.0;
-    float pZero[3] = {0.0, 0.0, 0.0};
+ * @return Area double*/
+double areaPoligono(double poligono[], int n){
+    double area = 0.0;
+    double pZero[3] = {0.0, 0.0, 0.0};
     for (int i = 0; i < n-1; i++){
         area +=  doisAreaT(pZero, &poligono[i*4], &poligono[(i+1)*4]);
     }
@@ -123,11 +124,11 @@ float areaPoligono(float poligono[], int n){
 
 /**
  *  Reordena polígino para ser anti-horário*/
-void reordena(float poligono[], int n){
-    float area = areaPoligono(poligono, n);
+void reordena(double poligono[], int n){
+    double area = areaPoligono(poligono, n);
     //Se a área é menor que 0, então ele é horário, então inverte
     if (area < 0){
-        float aux[4];
+        double aux[4];
         for (int i = 0; i < n/2; i++){
             for (int j = 0; j < 4; j++){
                 aux[j] = poligono[(i*4)+j];
@@ -139,10 +140,10 @@ void reordena(float poligono[], int n){
 }
 
 
-bool diagonal(int numeroDoPa, int numeroDoPb, float poligono[], int n){
+bool diagonal(int numeroDoPa, int numeroDoPb, double poligono[], int n){
 
     //in Cone()
-    float pa[3], pb[3] ,anteriorPa[3],anteriorPb[3],posteriorPa[3],posteriorPb[3];
+    double pa[3], pb[3] ,anteriorPa[3],anteriorPb[3],posteriorPa[3],posteriorPb[3];
     for(int i = 0; i < 3; i++){
         pa[i] = poligono[numeroDoPa*4+i];
         pb[i] = poligono[numeroDoPb*4+i];
@@ -183,7 +184,7 @@ bool diagonal(int numeroDoPa, int numeroDoPb, float poligono[], int n){
  * Vê se tem intersecção impropria entre  linha (p1,p2) e ponto(p3).
  *
  * @return 0 se não tem, 1 se tem*/
-bool interseccaoImpropria(float* p1, float* p2, float* p3){
+bool interseccaoImpropria(double* p1, double* p2, double* p3){
     if (collinear(p1, p2, p3) && ((p1[0] <= p3[0] && p3[0] <= p2[0])|| (p2[0] <= p3[0] && p3[0] <= p1[0]))){
         return true;
     }
@@ -193,36 +194,46 @@ bool interseccaoImpropria(float* p1, float* p2, float* p3){
  * Vê se tem intersecção própria entre duas linhas (p1,p2) (p3,p4).
  *
  * @return 0 se não tem, 1 se tem*/
-bool interseccaoPropria(float* p1, float* p2, float* p3, float* p4){
+bool interseccaoPropria(double* p1, double* p2, double* p3, double* p4){
     if (collinear(p1,p2,p3)||collinear(p1,p2,p4)){
         return false;
     }
-    if (left(p1, p2, p3) == left(p1, p2, p4)){
-        return false;
+
+    if (left(p1, p2, p3) != left(p1, p2, p4) && left(p3, p4, p1) != left(p3, p4, p2)){
+        return true;
     }
-    if (left(p3, p4, p1) == left(p3, p4, p2)){
-        return false;
-    }
-    return true;
+    
+    return false;
+}
+
+
+inline double Det(double a, double b, double c, double d)
+{
+        return a*d - b*c;
 }
 
 /** 
  * Vê onde tem a interseccao. (2D)
  *
- * @return ponto de interseccao (float[2])
-int interseccao(float* p1, float* p2, float* p3, float* p4){
+ * @return ponto de interseccao (double[2])*/
+void interseccao(double* p1, double* p2, double* p3, double* p4,double* ixOut,double* iyOut){
 
-/*
-    //As contas com ctz estão erradas!!!!
-    float alpha = (p4[0]-p3[0])*(p1[1]-p3[1]) - (p4[1]-p3[1])*(p1[0]-p3[0])
-    /((p4[1]-p3[1])*(p2[0]-p1[0]) - (p4[0]-p3[0])*(p2[1]-p1[1]));
+    // Line AB represented as a1x + b1y = c1
+    double a1 = p2[1] - p1[1];
+    double b1 = p1[0] - p2[0];
+    double c1 = a1*(p1[0]) + b1*(p1[1]);
+ 
+    // Line CD represented as a2x + b2y = c2
+    double a2 = p4[1] - p3[1];
+    double b2 = p3[0] - p4[0];
+    double c2 = a2*(p3[0])+ b2*(p3[1]);
+ 
+    double determinant = a1*b2 - a2*b1;
+ 
+    if (determinant != 0)
+    {
+        *ixOut = (b2*c1 - b1*c2)/determinant;
+        *iyOut = (a1*c2 - a2*c1)/determinant;
+    }
 
-    float beta = (p2[0]-p1[0])*(p1[1]-p3[1]) - (p2[1]-p1[1])*(p1[0]-p3[0])/
-    ((p4[1]-p3[1])*(p2[0]-p1[0]) - (p4[0]-p3[0])*(p2[1]-p1[1]));;
-    //!!!!!!!!!!!!!
-
-    float ponto[2] = {p1[0] + alpha*(p2[0]-p1[0]), p1[1] + alpha*(p2[1]-p1[1])};
-    return ponto;*/
-    /*float v = 0;
-    return 1;
-}*/
+}

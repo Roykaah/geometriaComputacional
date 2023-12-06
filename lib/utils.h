@@ -22,15 +22,16 @@
  * @return Compiled program.
  */
 int createShaderProgram(const char *, const char *);
-float doisAreaT(float*, float*, float*);
-bool left(float*, float*, float*);
-bool leftOn(float*, float*, float*);
-bool collinear(float*, float*, float*);
-float areaPoligono(float poligono[], int n);
-bool interseccaoImpropria(float* p1, float* p2, float* p3);
-bool interseccaoPropria(float* p1, float* p2, float* p3, float* p4);
-//int interseccao(float* p1, float* p2, float* p3, float* p4);
-bool reflexo(float* p1, float* p2, float* p3);
-bool convexo(float* p1, float* p2, float* p3);
-void reordena(float poligono[], int n);
-bool diagonal(int numeroDoPa, int numeroDoPb, float poligono[], int n);
+double doisAreaT(double*, double*, double*);
+bool left(double*, double*, double*);
+bool leftOn(double*, double*, double*);
+bool collinear(double*, double*, double*);
+double areaPoligono(double poligono[], int n);
+bool interseccaoImpropria(double* p1, double* p2, double* p3);
+bool interseccaoPropria(double* p1, double* p2, double* p3, double* p4);
+//int interseccao(double* p1, double* p2, double* p3, double* p4);
+bool reflexo(double* p1, double* p2, double* p3);
+bool convexo(double* p1, double* p2, double* p3);
+void reordena(double poligono[], int n);
+bool diagonal(int numeroDoPa, int numeroDoPb, double poligono[], int n);
+void interseccao(double* p1, double* p2, double* p3, double* p4,double* ixOut,double* iyOut);

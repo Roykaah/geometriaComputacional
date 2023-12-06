@@ -87,7 +87,7 @@ def createShaderProgram(vertex_code, fragment_code):
 #
 # @return The matrix.
 def matIdentity():
-    I = np.identity(4, dtype='float32')
+    I = np.identity(4, dtype='double32')
     
     return I
 
@@ -100,7 +100,7 @@ def matIdentity():
 # @param z Displacement along z-axis. 
 # @return The matrix.
 def matTranslate(x, y, z):
-    T =  np.identity(4, dtype='float32')
+    T =  np.identity(4, dtype='double32')
 
     T[0,3] = x
     T[1,3] = y
@@ -117,7 +117,7 @@ def matTranslate(x, y, z):
 # @param z Scale factor along z-axis. 
 # @return The matrix.
 def matScale(x, y, z):
-    T =  np.identity(4, dtype='float32')
+    T =  np.identity(4, dtype='double32')
 
     T[0,0] = x
     T[1,1] = y
@@ -132,7 +132,7 @@ def matScale(x, y, z):
 # @param angle Rotation angle in radians. 
 # @return The matrix.
 def matRotateX(angle):
-    R =  np.identity(4, dtype='float32')
+    R =  np.identity(4, dtype='double32')
 
     acos = math.cos(angle)
     asin = math.sin(angle)
@@ -151,7 +151,7 @@ def matRotateX(angle):
 # @param angle Rotation angle in radians. 
 # @return The matrix.
 def matRotateY(angle):
-    R =  np.identity(4, dtype='float32')
+    R =  np.identity(4, dtype='double32')
 
     acos = math.cos(angle)
     asin = math.sin(angle)
@@ -170,7 +170,7 @@ def matRotateY(angle):
 # @param angle Rotation angle in radians. 
 # @return The matrix.
 def matRotateZ(angle):
-    R =  np.identity(4, dtype='float32')
+    R =  np.identity(4, dtype='double32')
 
     acos = math.cos(angle)
     asin = math.sin(angle)
@@ -193,7 +193,7 @@ def matRotateZ(angle):
 # @return The matrix.
 def matPerspective(fovy, aspect, n, f):
 
-    P = np.zeros((4,4), dtype='float32')
+    P = np.zeros((4,4), dtype='double32')
     
     rad = fovy
     tan = math.tan(rad/2.0)
@@ -219,7 +219,7 @@ def matPerspective(fovy, aspect, n, f):
 # @return The matrix.
 def matFrustum(l, r, b, t, n, f):
     
-    F = np.zeros((4,4), dtype='float32')
+    F = np.zeros((4,4), dtype='double32')
 
     F[0,0] = (2.0*n)/(r-l)
     F[0,2] = (r+l)/(r-l)
@@ -244,7 +244,7 @@ def matFrustum(l, r, b, t, n, f):
 # @return The matrix.
 def matOrtho(l, r, b, t, n, f):
 
-    F = np.zeros((4,4), dtype='float32')
+    F = np.zeros((4,4), dtype='double32')
 
     F[0,0] = 2.0/(r-l)
     F[0,3] = -(r+l)/(r-l)

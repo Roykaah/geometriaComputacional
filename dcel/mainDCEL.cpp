@@ -54,23 +54,23 @@ void mouse(int button, int state, int x, int y)
                     case GLUT_LEFT_BUTTON:
                             
                             if (modo_criacao == 1){
-                                novo_ponto = ponto_mais_perto((float(x)*2/win_width -1), 
-                                                                -(float(y)*2/win_height -1), 
+                                novo_ponto = ponto_mais_perto((double(x)*2/win_width -1), 
+                                                                -(double(y)*2/win_height -1), 
                                                                 &dcel);
                                 connect(novo_ponto,ponto_anterior,&dcel);  
                                 ponto_anterior = novo_ponto;      
                                 modo_criacao = 0;
                             }
                             else{
-                                novo_ponto = ponto_mais_perto((float(x)*2/win_width -1), 
-                                                                -(float(y)*2/win_height -1), 
+                                novo_ponto = ponto_mais_perto((double(x)*2/win_width -1), 
+                                                                -(double(y)*2/win_height -1), 
                                                                 &dcel);
                                 connect(novo_ponto,ponto_central_planarizacao,&dcel);  
                             }
                             break;
                     case GLUT_RIGHT_BUTTON:
-                            novo_ponto->x = (float(x)*2/win_width -1);
-                            novo_ponto->y = -(float(y)*2/win_height -1);
+                            novo_ponto->x = (double(x)*2/win_width -1);
+                            novo_ponto->y = -(double(y)*2/win_height -1);
                             if (modo_criacao == 1){
                                 if(!existe_outro_ponto_muito_perto(novo_ponto,&dcel)){
                                     dcel.pontos.push_back(novo_ponto);
