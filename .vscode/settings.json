@@ -16,6 +16,8 @@
         "thread": "cpp",
         "cmath": "cpp",
         "*.tcc": "cpp",
-        "numbers": "cpp"
+        "numbers": "cpp",
+        "deque": "cpp",
+        "string": "cpp"
     }
 }

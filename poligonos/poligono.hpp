@@ -12,13 +12,15 @@ struct Ponto{
     int id;
     char tipo;//e=entrando, s=saindo; usado só pra intersecção
     double distancia_ao_ponto_de_referencia;
+    int visitado;
 };
 
 struct poligono{
     vector <Ponto*> polig;
-    vector <Ponto*> buracos;
+    vector<vector <Ponto*>> buracos;
 
 };
 
 
 vector<poligono*> interseccao_entre_poligonos(poligono* p1, poligono* p2);
+vector<Ponto*> reoordena(vector<Ponto*> pontos,int ordem);

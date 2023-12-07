@@ -26,8 +26,11 @@ int id_pontos = 0;
 int poligono_selecionado = 1;
 vector<Ponto*> pontos_interseccao;
 vector<poligono*> poligonos_interseccao;
+int qtd_buracos1 = 0;
+int qtd_buracos2 = 0;
 
 int modo_de_impressao = 'p';
+char modo_edicao = 'p'; //p = poligono, b = buraco
 
 
 void imprime_pontos2(vector<Ponto*> pontos){
@@ -44,8 +47,10 @@ void printa_arestas(vector<Ponto*> pontos){
            }
             glEnd();
 }
-void printa_poligono(poligono p, double r, double g, double b){
 
+
+
+void printa_poligono(poligono p, double r, double g, double b){
    if (!p.polig.empty()) {
     
         glColor3f(r, g , b); 
@@ -57,20 +62,22 @@ void printa_poligono(poligono p, double r, double g, double b){
         }
         //Printa os pontos do poligono interno
         if (!p.buracos.empty()) {
-            for (Ponto* v : p.buracos) {
-                glVertex2f(v->x, v->y);
-            }
+            for(vector<Ponto*> buraco : p.buracos)
+                for (Ponto* v : buraco) {
+                    glVertex2f(v->x, v->y);
+                }
         }
         glEnd();
 
         glColor3f(r, g , b); 
         printa_arestas(p.polig);
         if (!p.buracos.empty()) {
-            printa_arestas(p.buracos);
+            for(vector<Ponto*> buraco : p.buracos)
+                if (!buraco.empty())
+                    printa_arestas(buraco);
         }
 
     }
-        glFlush();
 
     
 }
@@ -104,10 +111,28 @@ void keyboard(unsigned char key, int x, int y) {
         case 'f':
             //fim do poligono
             if (poligono_selecionado == 1) {
-                p1.polig.push_back(p1.polig.front());
+                if (modo_edicao == 'p') {
+                    p1.polig = reoordena(p1.polig,1);
+                    p1.polig.push_back(p1.polig.front());
+                }
+                else if (modo_edicao == 'b') {                    
+                    p1.buracos[qtd_buracos1] = reoordena(p1.buracos[qtd_buracos1],0);
+                    p1.buracos[qtd_buracos1].push_back(p1.buracos[qtd_buracos1].front());
+                    qtd_buracos1++;
+                    p1.buracos.push_back(vector<Ponto*>());
+                }
             }
             else {
-                p2.polig.push_back(p2.polig.front());
+                if (modo_edicao == 'p'){
+                    p2.polig = reoordena(p2.polig,1);
+                    p2.polig.push_back(p2.polig.front());
+                }
+                else if (modo_edicao == 'b') {
+                    p2.buracos[qtd_buracos2] = reoordena(p2.buracos[qtd_buracos2],0);
+                    p2.buracos[qtd_buracos2].push_back(p2.buracos[qtd_buracos2].front());
+                    qtd_buracos2++;
+                    p2.buracos.push_back(vector<Ponto*>());
+                }
             }
             modo_de_impressao = 'p';
 
@@ -130,10 +155,12 @@ void mouse(int button, int state, int x, int y)
                     case GLUT_LEFT_BUTTON:
                         if (poligono_selecionado == 1) p1.polig.push_back(novo_ponto);
                         else p2.polig.push_back(novo_ponto);
+                        modo_edicao = 'p';
                         break;
                     case GLUT_RIGHT_BUTTON:
-                        if (poligono_selecionado == 1) p1.buracos.push_back(novo_ponto);
-                        else p2.buracos.push_back(novo_ponto);    
+                        modo_edicao = 'b';
+                        if (poligono_selecionado == 1) p1.buracos[qtd_buracos1].push_back(novo_ponto);
+                        else p2.buracos[qtd_buracos2].push_back(novo_ponto);    
                         break;
                     case GLUT_MIDDLE_BUTTON:
                         break;
@@ -145,17 +172,17 @@ void mouse(int button, int state, int x, int y)
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
-    //if (modo_de_impressao == 'p'){
+    if (modo_de_impressao == 'p'){
         printa_poligono(p1, 0.0, 0.0, 1.0);
         printa_poligono(p2, 0.0, 1.0, 0.0);
-   // }
-   // else if (modo_de_impressao == 'i'){
+    }
+    else if (modo_de_impressao == 'i'){
         for (poligono* p : poligonos_interseccao){
             printf("Poligono interseccao:\n");
             imprime_pontos2(p->polig);
             printa_poligono(*p, 1.0, 0.0, 0.0);
         }
-   // }
+    }
     glFlush();
 
 }
@@ -171,14 +198,16 @@ int main(int argc, char** argv) {
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glutKeyboardFunc(keyboard);
     
-    
+    p1.buracos.push_back(vector<Ponto*>());
+    p2.buracos.push_back(vector<Ponto*>());
 
     glutMainLoop();
 
     for (Ponto* v : p1.polig)
         delete v;
-    for (Ponto* v : p1.buracos){
-        delete v;
+    for (vector<Ponto*> pv : p1.buracos){
+        for (Ponto* v : pv)
+            delete v;
     }
     
     return 0;
