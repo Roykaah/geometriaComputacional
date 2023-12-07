@@ -124,7 +124,7 @@ double areaPoligono(double poligono[], int n){
 
 /**
  *  Reordena polígino para ser anti-horário*/
-void reordena(double poligono[], int n){
+void reordenaaaaaaaaaaaaaaaaa(double poligono[], int n){
     double area = areaPoligono(poligono, n);
     //Se a área é menor que 0, então ele é horário, então inverte
     if (area < 0){

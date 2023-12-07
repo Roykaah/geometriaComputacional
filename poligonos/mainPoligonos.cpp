@@ -105,7 +105,11 @@ void keyboard(unsigned char key, int x, int y) {
 
             break;  
         case 'i':
-            poligonos_interseccao = interseccao_entre_poligonos(&p1, &p2);
+            poligonos_interseccao = interseccao_entre_poligonos(&p1, &p2,'i');
+            modo_de_impressao = 'i';
+            break;
+        case 'u':
+            poligonos_interseccao = interseccao_entre_poligonos(&p1, &p2,'u');
             modo_de_impressao = 'i';
             break;
         case 'f':

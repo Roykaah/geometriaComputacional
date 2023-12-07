@@ -22,5 +22,5 @@ struct poligono{
 };
 
 
-vector<poligono*> interseccao_entre_poligonos(poligono* p1, poligono* p2);
+vector<poligono*> interseccao_entre_poligonos(poligono* p1, poligono* p2,char operacao);
 vector<Ponto*> reoordena(vector<Ponto*> pontos,int ordem);

@@ -14,7 +14,7 @@
 
 void imprime_pontos(vector<Ponto*> pontos){
     for (Ponto* v : pontos) {
-        
+        printf("Ponto %d: (%lf, %lf) do tipo %c visitado=%d   distancia=%lf\n", v->id, v->x, v->y, v->tipo, v->visitado,v->distancia_ao_ponto_de_referencia);
     }
 }
 double dooisAreaT(double* p1, double* p2, double* p3){
@@ -180,7 +180,7 @@ vector<vector<Ponto*>> poligono_e_suas_interseccoes(vector<Ponto*> pontos1, vect
             double p4[3] = {poligono_e_interseccoes[1][j+1]->x, poligono_e_interseccoes[1][j+1]->y,0.0};
             int tem_interseccao = interseccaoPropria(p1, p2, p3, p4);
             //Se tem intersecção, calcula ponto de intersecção e insere no poligono
-            
+            printf("PontosAQUI %d e %d\n",pontos1[i]->id,poligono_e_interseccoes[1][j]->id);
             if (tem_interseccao){
                 double x,y;
                 interseccao(p1, p2, p3, p4,&x,&y);
@@ -220,7 +220,7 @@ vector<vector<Ponto*>> poligono_e_suas_interseccoes(vector<Ponto*> pontos1, vect
         pontos_interseccao_pol1_aux.clear();
 
     }
-    
+    printf("A\n");
     poligono_e_interseccoes[0].push_back(pontos1[0]);  
     poligono_e_interseccoes[0] = reoordena_interseccoes(poligono_e_interseccoes[0]);
 
@@ -238,11 +238,11 @@ vector<Ponto *> encontra_id_entrada_e_saida_I(vector<Ponto*> pontos_interseccao,
     int tipo_atual;
     for(int c=0; c<2;c++)
     for(i = 0;i< pontos_interseccao.size(); i++){
-        
+        printf("1ponto atual:  %d do tipo %c, mas estou procurando %d com visitado = %d\n",pontos_interseccao[i]->id,pontos_interseccao[i]->tipo,id_objetivo,pontos_interseccao[i]->visitado);
         //Se achou uma entrada, então insere e sai do for
         if (pontos_interseccao[i]->tipo == 'e' && pontos_interseccao[i]->visitado == false && id_objetivo == pontos_interseccao[i]->id){
             
-            
+            printf("Achou entrada %d para pol1\n", pontos_interseccao[i]->id);
             *id_entrada = pontos_interseccao[i]->id;
             *i_entrada = i;
             tipo_atual = 'e';
@@ -250,13 +250,13 @@ vector<Ponto *> encontra_id_entrada_e_saida_I(vector<Ponto*> pontos_interseccao,
         //Se achou uma ponto normal, então insere 
         if (pontos_interseccao[i]->id >= 0 && pontos_interseccao[i]->visitado == false && tipo_atual == 'e'){
             
-            
+            printf("Achou ponto extra %d para pol1\n", pontos_interseccao[i]->id);
             poligono_atual.push_back(pontos_interseccao[i]);
         }
         //Se achou uma saída, então insere e sai do for
         if (pontos_interseccao[i]->tipo == 's' && pontos_interseccao[i]->visitado == false && tipo_atual == 'e'){
             
-            
+            printf("Achou saída %d para pol1\n", pontos_interseccao[i]->id);
             *id_saida = pontos_interseccao[i]->id;
             *i_saida = i;
             poligono_atual.push_back(pontos_interseccao[i]);
@@ -280,7 +280,7 @@ vector<Ponto *> encontra_id_entrada_e_saida_J(vector<Ponto*> pontos_interseccao,
         //Se achou uma entrada, então insere e sai do for
         if (pontos_interseccao[i]->tipo == 's' && pontos_interseccao[i]->visitado == false && id_objetivo == pontos_interseccao[i]->id){
             
-            
+            printf("Achou entrada %d para pol2\n", pontos_interseccao[i]->id);
             *id_entrada = pontos_interseccao[i]->id;
             *i_entrada = i;
             tipo_atual = 's';
@@ -288,13 +288,13 @@ vector<Ponto *> encontra_id_entrada_e_saida_J(vector<Ponto*> pontos_interseccao,
         //Se achou uma ponto normal, então insere 
         if (pontos_interseccao[i]->id >= 0 && pontos_interseccao[i]->visitado == false && tipo_atual == 's'){
             
-            
+            printf("Achou ponto extra %d para pol2\n", pontos_interseccao[i]->id);
             poligono_atual.push_back(pontos_interseccao[i]);
         }
         //Se achou uma saída, então insere e sai do for
         if (pontos_interseccao[i]->tipo == 'e' && pontos_interseccao[i]->visitado == false && tipo_atual == 's'){
             
-            
+            printf("Achou saída %d para pol2\n", pontos_interseccao[i]->id);
             *id_saida = pontos_interseccao[i]->id;
             *i_saida = i;
             poligono_atual.push_back(pontos_interseccao[i]);
@@ -350,14 +350,14 @@ vector<poligono*> weiler_atherton_2(vector<Ponto*> pontos_interseccao_pol1,vecto
     int id_inicial = -9999999;
     for(i = 0; i< pontos_interseccao_pol1.size(); i++){
         if (pontos_interseccao_pol1[i]->tipo == 'e' && pontos_interseccao_pol1[i]->visitado == false){
-            
+            printf("Achou entrada INICIAL %d\n", pontos_interseccao_pol1[i]->id);
             id_inicial = pontos_interseccao_pol1[i]->id;
             break;
         }
     }
     //Se não achou inicial que não foi visitada, esse é o nosso caso base
     if (id_inicial == -9999999){
-        
+        printf("Não achou entrada\n");
         return poligonos_interseccao;
     }
 
@@ -367,15 +367,15 @@ vector<poligono*> weiler_atherton_2(vector<Ponto*> pontos_interseccao_pol1,vecto
     int id_objetivo = id_inicial;
     int qtd_voltas = 0;
     while(!achou_entrada){
-        
+        printf("Procurando por entrada %d no pol1\n",id_saida);
         poligono_atual = merge_pontos(poligono_atual,encontra_id_entrada_e_saida_I(pontos_interseccao_pol1,id_objetivo, &id_entrada, &i_entrada, &id_saida, &i_saida));
-        
+        printf("Achou entrada %d e saída %d\n", id_entrada,id_saida);
         pontos_interseccao_pol1 = marca_como_visitado(pontos_interseccao_pol1,i_entrada,i_saida);
         id_objetivo = id_saida;
-        
+        printf("Procurando por entrada %d no pol2\n",id_saida);
         //imprime_pontos(pontos_interseccao_pol1);
         poligono_atual = merge_pontos(poligono_atual,encontra_id_entrada_e_saida_J(pontos_interseccao_pol2,id_objetivo,&id_entrada, &i_entrada, &id_saida, &i_saida));
-        
+        printf("Achou entrada %d e saída %d\n", id_entrada,id_saida);
         pontos_interseccao_pol2 = marca_como_visitado(pontos_interseccao_pol2,i_entrada,i_saida);
         pontos_interseccao_pol1 = marca_como_visitado_id(pontos_interseccao_pol1,id_saida);
         id_objetivo = id_saida;
@@ -384,7 +384,7 @@ vector<poligono*> weiler_atherton_2(vector<Ponto*> pontos_interseccao_pol1,vecto
         if(id_saida == id_inicial){
             achou_entrada = true;
         }else{
-            
+            printf("Não achou entrada, continua procurando o id %d\n",id_inicial);
         }
     }
     poligono_atual.push_back(poligono_atual[0]);
@@ -404,9 +404,9 @@ vector<poligono*> weiler_atherton(vector<Ponto*> pontos_interseccao_pol1,vector<
     poligono* poligono_atual = new poligono;
     pontos_interseccao_pol1 = marca_nao_visitados(pontos_interseccao_pol1);
     pontos_interseccao_pol2 = marca_nao_visitados(pontos_interseccao_pol2);
-    
+    printf("BURACO NO MESCLLAAA:\n");
         imprime_pontos(pontos_interseccao_pol1);
-        
+        printf("INTERSECCAO NO MESCLLAAA:\n");
         imprime_pontos(pontos_interseccao_pol2);
     char tipo_atual = 'n';
     int completou_uma_volta = false;
@@ -420,7 +420,7 @@ vector<poligono*> weiler_atherton(vector<Ponto*> pontos_interseccao_pol1,vector<
     while(voltas_completadas < 25){
         //Se ainda não tinha achado nenhuma intersecção e era uma entrada, insere
         if (pontos_interseccao_pol1[i]->tipo == 'e' && pontos_interseccao_pol1[i]->visitado == false && tipo_atual != 'e' ){ 
-            
+            printf("Encontrou a entrada %d em pol1 e i=%d\n", pontos_interseccao_pol1[i]->id, i);
             pontos_interseccao_pol1[i]->visitado = true;
             id_primeiro_ponto = pontos_interseccao_pol1[i]->id;
             poligono_atual->polig.push_back(pontos_interseccao_pol1[i]);
@@ -428,42 +428,42 @@ vector<poligono*> weiler_atherton(vector<Ponto*> pontos_interseccao_pol1,vector<
         }
         //Se já achou a entrada E o ponto não é uma intersecção, insere
         if (tipo_atual == 'e' && pontos_interseccao_pol1[i]->id >= 0 && pontos_interseccao_pol1[i]->visitado == false ){
-            
+            printf("Encontrou um ponto extra no pol1 %d e i=%d\n", pontos_interseccao_pol1[i]->id,i);
             pontos_interseccao_pol1[i]->visitado = true;
             poligono_atual->polig.push_back(pontos_interseccao_pol1[i]);
         }
         //Se já achou uma entrada E é uma intersecção de saída, busca no outro poligono
         if (tipo_atual == 'e' && pontos_interseccao_pol1[i]->tipo == 's' && pontos_interseccao_pol1[i]->visitado == false ){
-            
+            printf("Encontrou uma saída pol1 %d e i=%d\n", pontos_interseccao_pol1[i]->id, i);
             pontos_interseccao_pol1[i]->visitado = true;
             poligono_atual->polig.push_back(pontos_interseccao_pol1[i]);
 
             int achou_j = false;
             for(;;j++){
                 if (j == tamanho_pol2){
-                    
+                    printf("Deu uma volta no pol2\n");
                     qtd_voltas++;
                     if (qtd_voltas == 3){
-                        
+                        printf("Deu 3 voltas no pol2\n");
                         break;
                     }
                     j = 1;
                 }
                 if (!achou_j && pontos_interseccao_pol1[i]->id == pontos_interseccao_pol2[j]->id){
                     pontos_interseccao_pol2[j]->visitado = true;
-                    
+                    printf("Encontrou j %d\n", j);
                     achou_j = true;
                 }
                 //Se já achou j e não é um ponto de intersecção, então insere 
                 if (achou_j &&  pontos_interseccao_pol2[j]->id>= 0 && pontos_interseccao_pol2[j]->visitado == false){
                     pontos_interseccao_pol2[j]->visitado = true;
-                    
+                    printf("Encontrou um ponto extra no pol 2 %d\n", pontos_interseccao_pol2[j]->id);
                     poligono_atual->polig.push_back(pontos_interseccao_pol2[j]);
                 }
                 //Se já achou j e    j é uma saída de pol2, então insere e sai do for
                 if (achou_j && pontos_interseccao_pol2[j]->tipo == 'e' && pontos_interseccao_pol2[j]->visitado == false){
                     pontos_interseccao_pol2[j]->visitado = true;
-                    
+                    printf("Encontrou uma saída pol2 %d, sendo que o id_inicial =%d \n", pontos_interseccao_pol2[j]->id,id_primeiro_ponto);
                     poligono_atual->polig.push_back(pontos_interseccao_pol2[j]);
                     tipo_atual = 's';
                     /*atualiza valor no outro vetor*/
@@ -474,7 +474,7 @@ vector<poligono*> weiler_atherton(vector<Ponto*> pontos_interseccao_pol1,vector<
                     }
                     if (pontos_interseccao_pol2[j]->id == id_primeiro_ponto){
                         poligonos_interseccao.push_back(poligono_atual);
-                        
+                        printf("Fechou uma interseccao, poligono %ld\n", poligonos_interseccao.size());
                         poligono_atual = new poligono;
                         id_primeiro_ponto = -9999999;
                         break;
@@ -483,7 +483,7 @@ vector<poligono*> weiler_atherton(vector<Ponto*> pontos_interseccao_pol1,vector<
                             if (pontos_interseccao_pol1[z]->id == pontos_interseccao_pol2[j]->id){
                                 tipo_atual = 'e';
                                 pontos_interseccao_pol1[z]->visitado = true;
-                                
+                                printf("Pesquisou por E encontrou o ponto %d no pol1 na posicao %d\n", pontos_interseccao_pol1[z]->id, z);
                                 i = z;
                                 break;
                             }
@@ -496,7 +496,7 @@ vector<poligono*> weiler_atherton(vector<Ponto*> pontos_interseccao_pol1,vector<
         }
         i++;
         if (i == tamanho_pol1) {
-            
+            printf("Deu uma volta no pol 1\n");
             i = 1;
             voltas_completadas++;
             completou_uma_volta = true;
@@ -545,9 +545,9 @@ vector<poligono*> mescla_intersseccao_com_buracos(poligono* interseccao, vector<
         vector<Ponto*> pontos_interseccao_pol1 = pontos_interseccao[1];
         vector<Ponto*> pontos_interseccao_buraco = pontos_interseccao[0];
         
-        
+        printf("ENTRANDO EM WEILER:\n");
         novas_interseccoes = weiler_atherton( pontos_interseccao_buraco, pontos_interseccao_pol1);
-        
+        printf("SAIIIINDO DE WEILER:\n");
 
     }
     
@@ -596,9 +596,9 @@ vector<poligono*> interseccao_entre_poligonos(poligono* p1, poligono* p2,char op
     vector<vector<Ponto*>> pontos_interseccao = poligono_e_suas_interseccoes(p1_aux->polig, p2_aux->polig);
     vector<Ponto*> pontos_interseccao_pol1 = pontos_interseccao[0];
     vector<Ponto*> pontos_interseccao_pol2 = pontos_interseccao[1];
-    
+    printf("Pontos interseccao pol1:\n");
     imprime_pontos(pontos_interseccao_pol1);
-    
+    printf("Pontos interseccao pol2:\n");
     imprime_pontos(pontos_interseccao_pol2);
 
     
@@ -640,55 +640,45 @@ vector<poligono*> interseccao_entre_poligonos(poligono* p1, poligono* p2,char op
         }
     }
     else if (operacao == 'u'){
-        /*
+        
         //une buracos 2 e pol 1
         //Faz interseccao desse resultado com o buracos 2
         
         //reordena pol1 e pol2
-        printf("Entrou na opcao buraco de uniao\n");
-        
+        if(p1->buracos.empty() && p2->buracos.empty()){
             p1_aux->polig = reoordena(p1_aux->polig,1);
             p2_aux->polig = reoordena(p2_aux->polig,1);
-                    printf("reoordenou\n");
 
             poligonos_interseccao_final = poligonos_interseccao;
             vector<vector<Ponto*>> buracos_poligonos_final;
             vector<poligono*> vec_pol_aux;
             poligono* pol_aux;
-            if (!p1->buracos.empty())
             for(vector<Ponto*> b : p1->buracos){
-                if (b.empty()) continue;
-                                    printf("buraco em p1\n");
-
                 b = reoordena(b,1);
                 b = deixa_positivo(b);
                 pol_aux->polig = b;
                 vec_pol_aux = interseccao_entre_poligonos(p2_aux, pol_aux, 'b');
                 
                 for(poligono* p : vec_pol_aux){
-                    
+                    printf("Adicionou um buraco no final\n");
                     buracos_poligonos_final.push_back(p->polig);
                 }
-            }  
-            if (!p2->buracos.empty())
+            }
             for(vector<Ponto*> b : p2->buracos){
-                if (b.empty()) continue;                
-                                    printf("buraco em p2\n");
+                                printf("RETORNOU ALGO DO BURACO?");
 
                 b = reoordena(b,1);
                 pol_aux->polig = b;
                 vec_pol_aux = interseccao_entre_poligonos(p1_aux, pol_aux, 'b');
-                                                    printf("buraco em p22222222\n");
-
                 imprime_pontos(vec_pol_aux[0]->polig);
                 for(poligono* p : vec_pol_aux){
-                    
+                    printf("Adicionou um buraco no final\n");
                     buracos_poligonos_final.push_back(p->polig);
                     
                 }
             }
             poligonos_interseccao_final[0]->buracos = buracos_poligonos_final;
-        */
+        }
     }
 
 
